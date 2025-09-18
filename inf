@@ -1,0 +1,27 @@
+local Player = game:GetService("Players").LocalPlayer
+local UIS = game:GetService("UserInputService")
+
+local enabled = true
+local lastJump = 0
+
+UIS.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.Space and enabled then
+        local character = Player.Character
+        if character and tick() - lastJump > 0.25 then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid:GetState() ~= Enum.HumanoidStateType.Freefall then
+                humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                lastJump = tick()
+            end
+        end
+    end
+    
+    if input.KeyCode == Enum.KeyCode.F9 then
+        enabled = not enabled
+    end
+end)
+
+-- Автопереподключение при респавне
+Player.CharacterAdded:Connect(function()
+    warn("Infinite Jump переподключен")
+end)
